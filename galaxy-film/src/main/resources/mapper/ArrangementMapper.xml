@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.ArrangementMapper">
+
+    <!-- int insert(Film film); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fms_arrangement(film_id, film_name, cinema_name, screen_name, price, remaining, gmt_start, gmt_end)
+        VALUES (#{filmId}, #{filmName}, #{cinemaName}, #{screenName}, #{price}, #{remaining}, #{gmtStart}, #{gmtEnd})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM fms_arrangement
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Album album); -->
+    <update id="updateById">
+        UPDATE
+        fms_arrangement
+        <set>
+            <if test="filmId != null">
+                film_id=#{filmId},
+            </if>
+            <if test="filmName != null">
+                film_name=#{filmName},
+            </if>
+            <if test="cinemaName != null">
+                cinema_name=#{cinemaName},
+            </if>
+            <if test="screenName != null">
+                screen_name=#{screenName},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="remaining != null">
+                remaining=#{remaining},
+            </if>
+            <if test="gmtStart != null">
+                gmt_start=#{gmtStart},
+            </if>
+            <if test="gmtEnd != null">
+                gmt_end=#{gmtEnd},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM fms_arrangement
+    </select>
+
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        fms_arrangement
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id,film_id,film_name, cinema_name, screen_name, price,remaining, gmt_start, gmt_end
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ArrangementStandardVO">
+        <id column="id" property="id"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="remaining" property="remaining"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_arrangement
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,film_id,film_name, cinema_name, screen_name, price,remaining, gmt_start, gmt_end
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ArrangementListItemVO">
+        <id column="id" property="id"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="remaining" property="remaining"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> listByScreenId();-->
+    <select id="listByScreenName" resultMap="listByScreenIdItemResultMap">
+        SELECT
+        <include refid="listByScreenIdItemQueryFields"/>
+        FROM
+        fms_arrangement
+        ORDER BY
+        screen_name=#{screenName}
+    </select>
+
+    <sql id="listByScreenIdItemQueryFields">
+        <if test="true">
+            id,film_id,film_name,cinema_name, screen_name, price,remaining, gmt_start, gmt_end
+        </if>
+    </sql>
+
+    <resultMap id="listByScreenIdItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ArrangementListItemVO">
+        <id column="id" property="id"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="remaining" property="remaining"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <select id="getArrangementById" resultMap="getByIdItemResultMap">
+        select
+        <include refid="getByIdItemQueryFields"/>
+        from fms_arrangement
+        where id=#{id}
+    </select>
+
+    <sql id="getByIdItemQueryFields">
+        <if test="true">
+            id,film_id,film_name,cinema_name, screen_name, price,remaining, gmt_start, gmt_end
+        </if>
+    </sql>
+
+    <resultMap id="getByIdItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.entity.Arrangement">
+        <id column="id" property="id"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="remaining" property="remaining"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <select id="getRemainingById" resultType="int">
+        select remaining
+        from fms_arrangement
+        where id = #{id}
+    </select>
+
+    <!-- 根据场次id获取减少座位数的标准信息 -->
+    <update id="updateRemaining">
+        update fms_arrangement
+        set remaining=remaining - #{reduceCount}
+        where id = #{id}
+          and remaining >= #{reduceCount}
+    </update>
+
+    <!-- 根据电影id和日期查询场次 -->
+    <select id="listByFilmId" resultMap="listByFilmIdResultMap">
+        select fa.id fid, fa.screen_name, fa.price, fa.gmt_start, fa.gmt_end, fs.type
+        from fms_arrangement fa
+                 join fms_screen fs on fa.screen_name = fs.name
+        where fa.film_id = #{filmId}
+    </select>
+    <resultMap id="listByFilmIdResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ArrangementListByFilmIdVO">
+        <id column="fid" property="id"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="type" property="type"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <!-- 分页查询搜索所有场次 -->
+    <select id="findAllArrangements" resultMap="ListResultMap">
+        select
+        <include refid="ListItemQueryFields"/>
+        from fms_arrangement
+    </select>
+
+    <resultMap id="ListResultMap" type="cn.tedu.galaxy.commons.pojo.film.entity.Arrangement">
+        <id column="id" property="id"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="price" property="price"/>
+        <result column="remaining" property="remaining"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+</mapper>

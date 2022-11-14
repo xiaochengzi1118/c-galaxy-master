@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.CinemaMapper">
+
+    <!-- int insert(Cinema cinema); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fms_cinema(name, brand, location, is_refuse, is_endorse)
+        VALUES (#{name}, #{brand}, #{location}, #{isRefuse}, #{isEndorse})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM fms_cinema
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Album album); -->
+    <update id="updateById">
+        UPDATE
+        fms_cinema
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="brand != null">
+                brand=#{brand},
+            </if>
+            <if test="location != null">
+                location=#{location},
+            </if>
+            <if test="isRefuse != null">
+                is_refuse=#{isRefuse},
+            </if>
+            <if test="isEndorse != null">
+                is_endorse=#{isEndorse},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM fms_cinema
+    </select>
+
+    <!-- int countByName(String name); -->
+    <select id="countByName" resultType="int">
+        SELECT count(*)
+        FROM fms_cinema
+        WHERE name = #{name}
+    </select>
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        fms_cinema
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id,name, brand, location, is_refuse, is_endorse
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.CinemaStandardVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="brand" property="brand"/>
+        <result column="location" property="location"/>
+        <result column="is_refuse" property="isRefuse"/>
+        <result column="is_endorse" property="isEndorse"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_cinema
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,name, brand, location, is_refuse, is_endorse
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.CinemaListItemVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="brand" property="brand"/>
+        <result column="location" property="location"/>
+        <result column="is_refuse" property="isRefuse"/>
+        <result column="is_endorse" property="isEndorse"/>
+    </resultMap>
+
+    <!-- 根据电影id查询影院 -->
+    <select id="getCinemaByFilmId" resultMap="ListItemResultMap">
+        select distinct fc.id, fc.name, fc.location, fc.brand, fc.is_refuse, fc.is_endorse
+        from fms_cinema fc
+                 join fms_arrangement fa on fc.name = fa.cinema_name
+        where fa.film_id = #{filmId}
+    </select>
+
+
+</mapper>

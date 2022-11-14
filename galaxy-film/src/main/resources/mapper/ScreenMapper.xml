@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.ScreenMapper">
+
+    <!-- int insert(Film film); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fms_screen(name, type, ro, co)
+        VALUES (#{name}, #{type}, #{ro}, #{co})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM fms_screen
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Album album); -->
+    <update id="updateById">
+        UPDATE
+        fms_screen
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="ro != null">
+                ro=#{ro},
+            </if>
+            <if test="co != null">
+                co=#{co},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM fms_screen
+    </select>
+
+    <!-- int countByName(String name); -->
+    <select id="countByName" resultType="int">
+        SELECT count(*)
+        FROM fms_screen
+        WHERE name = #{name}
+    </select>
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        fms_screen
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id, name, type,ro, co
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ScreenStandardVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_screen
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id, name, type, ro, co
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.ScreenListItemVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+    </resultMap>
+
+    <select id="getRoByName" resultType="Integer">
+        select ro
+        from fms_screen
+        where name=#{name}
+    </select>
+
+    <select id="getCoByName" resultType="Integer">
+        select co
+        from fms_screen
+        where name=#{name}
+    </select>
+
+
+</mapper>

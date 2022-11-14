@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.admin.mapper.RoleMapper">
+
+    <!-- int countById(Long id); -->
+    <select id="countById" resultType="int">
+        SELECT count(*) FROM ums_role WHERE id=#{id}
+    </select>
+
+    <!-- List<RoleListItemVO> list(); -->
+    <select id="list" resultMap="ListResultMap">
+        SELECT
+            <include refid="ListQueryFields" />
+        FROM
+            ums_role
+        ORDER BY
+            id
+    </select>
+
+    <sql id="ListQueryFields">
+        <if test="true">
+            id, name
+        </if>
+    </sql>
+
+    <resultMap id="ListResultMap" type="cn.tedu.galaxy.commons.pojo.admin.vo.RoleListItemVO">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+    </resultMap>
+
+</mapper>

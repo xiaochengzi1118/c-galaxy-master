@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.order.mapper.OrderMapper">
+
+    <!-- int insert(Cinema cinema); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO galaxy.fms_order(id,arrangement_id, film_name, cinema_name, screen_name, screen_type,
+                              picture, price, user_id, username, phone, ro, co,
+                              state, gmt_start, gmt_end, gmt_order, gmt_pay)
+        VALUES (#{id},#{arrangementId}, #{filmName}, #{cinemaName}, #{screenName}, #{screenType}, #{picture}, #{price},
+                #{userId}, #{username}, #{phone}, #{ro}, #{co}, #{state}, #{gmtStart}, #{gmtEnd},
+                #{gmtOrder}, #{gmtPay})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM galaxy.fms_order
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Album album); -->
+    <update id="updateById">
+        UPDATE
+        galaxy. fms_order
+        <set>
+            <if test="arrangementId != null">
+                arrangement_id=#{arrangementId},
+            </if>
+            <if test="filmName != null">
+                film_name=#{filmName},
+            </if>
+            <if test="cinemaName != null">
+                cinema_name=#{cinemaName},
+            </if>
+            <if test="screenName != null">
+                screen_name=#{screenName},
+            </if>
+            <if test="screenType != null">
+                screen_type=#{screenType},
+            </if>
+            <if test="picture != null">
+                picture=#{picture},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="ro != null">
+                ro=#{ro},
+            </if>
+            <if test="co != null">
+                co=#{co},
+            </if>
+            <if test="state != null">
+                state=#{state},
+            </if>
+            <if test="gmtStart != null">
+                gmt_start=#{gmtStart},
+            </if>
+            <if test="gmtEnd != null">
+                gmt_end=#{gmtEnd},
+            </if>
+            <if test="gmtOrder != null">
+                gmt_order=#{gmtOrder},
+            </if>
+            <if test="gmtPay != null">
+                gmt_pay=#{gmtPay},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM galaxy.fms_order
+    </select>
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        galaxy.fms_order
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id,arrangement_id, film_name, cinema_name, screen_name, screen_type, picture,
+            price, user_id, username, phone, ro, co,state, gmt_start, gmt_end,
+            gmt_order, gmt_pay
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.entity.Order">
+        <id column="id" property="id"/>
+        <result column="arrangement_id" property="arrangementId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="screen_type" property="screenType"/>
+        <result column="picture" property="picture"/>
+        <result column="price" property="price"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="phone" property="phone"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+        <result column="state" property="state"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+        <result column="gmt_order" property="gmtOrder"/>
+        <result column="gmt_pay" property="gmtPay"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        galaxy.fms_order
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,arrangement_id, film_name, cinema_name, screen_name, screen_type, picture,
+            price, user_id, username, phone, ro, co,state, gmt_start, gmt_end,
+            gmt_order, gmt_pay
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.OrderListItemVO">
+        <id column="id" property="id"/>
+        <result column="arrangement_id" property="arrangementId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="screen_type" property="screenType"/>
+        <result column="picture" property="picture"/>
+        <result column="price" property="price"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="phone" property="phone"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+        <result column="state" property="state"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+        <result column="gmt_order" property="gmtOrder"/>
+        <result column="gmt_pay" property="gmtPay"/>
+    </resultMap>
+
+    <!-- FileStandardVO getStandardById(Long user_id); -->
+    <select id="getStandardByUserId" resultMap="uoStandardResultMap">
+        SELECT
+        <include refid="uoStandardQueryFields"/>
+        FROM
+        galaxy.fms_order
+        WHERE
+        user_id=#{user_id}
+    </select>
+
+    <sql id="uoStandardQueryFields">
+        <if test="true">
+            id,arrangement_id, film_name, cinema_name, screen_name, screen_type, picture,
+            price,  phone, ro, co,state, gmt_start, gmt_end,
+            gmt_order, gmt_pay
+        </if>
+    </sql>
+
+    <resultMap id="uoStandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.UserOrderStandardVO">
+        <result column="id" property="id"/>
+        <result column="arrangement_id" property="arrangementId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="screen_type" property="screenType"/>
+        <result column="picture" property="picture"/>
+        <result column="price" property="price"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="phone" property="phone"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+        <result column="state" property="state"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+        <result column="gmt_order" property="gmtOrder"/>
+        <result column="gmt_pay" property="gmtPay"/>
+    </resultMap>
+
+
+<!--    List<Order> findAllOrders();-->
+    <select id="findAllOrders" resultMap="ListResultMap">
+        SELECT
+        <include refid="ListQueryFields"/>
+        FROM
+        galaxy.fms_order
+    </select>
+
+    <sql id="ListQueryFields">
+        <if test="true">
+            id,arrangement_id, film_name, cinema_name, screen_name, screen_type, picture,
+            price, user_id, username, phone, ro, co,state, gmt_start, gmt_end,
+            gmt_order, gmt_pay
+        </if>
+    </sql>
+
+    <resultMap id="ListResultMap" type="cn.tedu.galaxy.commons.pojo.film.entity.Order">
+        <id column="id" property="id"/>
+        <result column="arrangement_id" property="arrangementId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="cinema_name" property="cinemaName"/>
+        <result column="screen_name" property="screenName"/>
+        <result column="screen_type" property="screenType"/>
+        <result column="picture" property="picture"/>
+        <result column="price" property="price"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="phone" property="phone"/>
+        <result column="ro" property="ro"/>
+        <result column="co" property="co"/>
+        <result column="state" property="state"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+        <result column="gmt_order" property="gmtOrder"/>
+        <result column="gmt_pay" property="gmtPay"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.CommentMapper">
+
+    <!-- int insert(Cinema cinema); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fms_comment(user_id, username, nick, avatar,
+                                content, film_id, film_name, like_count,
+                                comment_count, depth, parent_id, gmt_comment)
+        VALUES (#{userId}, #{username}, #{nick}, #{avatar}, #{content}, #{filmId}
+               , #{filmName}, #{likeCount}, #{commentCount}, #{depth}
+               , #{parentId}, #{gmtComment})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM fms_comment
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Album album); -->
+    <update id="updateById">
+        UPDATE
+        fms_comment
+        <set>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="nick != null">
+                nick=#{nick},
+            </if>
+            <if test="avatar != null">
+                avatar=#{avatar},
+            </if>
+            <if test="content != null">
+                content=#{content},
+            </if>
+            <if test="filmId != null">
+                film_id=#{filmId},
+            </if>
+            <if test="filmName != null">
+                film_name=#{filmName},
+            </if>
+            <if test="likeCount != null">
+                like_count=#{likeCount},
+            </if>
+            <if test="commentCount != null">
+                comment_count=#{commentCount},
+            </if>
+            <if test="depth != null">
+                depth=#{depth},
+            </if>
+            <if test="parentId != null">
+                parent_id=#{parentId},
+            </if>
+            <if test="gmtComment != null">
+                gmt_comment=#{gmtComment},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM fms_comment
+    </select>
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        fms_comment
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id, user_id, username, nick, avatar,
+            content, film_id, film_name, like_count,
+            comment_count, depth, parent_id, gmt_comment
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.CommentStandardVO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="nick" property="nick"/>
+        <result column="avatar" property="avatar"/>
+        <result column="content" property="content"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="depth" property="depth"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="gmt_comment" property="gmtComment"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="listByFid" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_comment fc JOIN fms_score fs ON fc.user_id=fs.user_id AND fc.film_id=fs.film_id
+        WHERE
+        fc.film_id=#{fid}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            fc.id, fc.user_id, username, nick, avatar,
+            content, fc.film_id, film_name, like_count,
+            comment_count, depth, parent_id, gmt_comment,score
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.CommentListItemVO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="nick" property="nick"/>
+        <result column="avatar" property="avatar"/>
+        <result column="content" property="content"/>
+        <result column="film_id" property="filmId"/>
+        <result column="film_name" property="filmName"/>
+        <result column="like_count" property="likeCount"/>
+        <result column="comment_count" property="commentCount"/>
+        <result column="depth" property="depth"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="gmt_comment" property="gmtComment"/>
+        <result column="score" property="score"/>
+    </resultMap>
+
+</mapper>

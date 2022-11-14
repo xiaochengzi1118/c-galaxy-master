@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.FilmMapper">
+
+    <!-- int insert(Film film); -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fms_film (name, actor, director, detail, duration, type, hot, gmt_release, region,
+                              picture, state)
+        VALUES (#{name}, #{actor}, #{director}, #{detail}, #{duration}, #{type}, #{hot},
+                #{gmtRelease}, #{region}, #{picture}, #{state})
+    </insert>
+
+    <!-- int deleteById(Long id); -->
+    <delete id="deleteById">
+        DELETE
+        FROM fms_film
+        WHERE id = #{id}
+    </delete>
+
+    <!-- int updateById(Film film); -->
+    <update id="updateById">
+        UPDATE
+        fms_film
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="actor != null">
+
+                actor=#{actor},
+            </if>
+            <if test="director != null">
+                director=#{director},
+            </if>
+            <if test="detail != null">
+                detail=#{detail},
+            </if>
+            <if test="duration != null">
+                duration=#{duration},
+            </if>
+            <if test="type != null">
+                type=#{type},
+            </if>
+            <if test="hot != null">
+                hot=#{hot},
+            </if>
+            <if test="gmtRelease != null">
+                gmt_release=#{gmtRelease},
+            </if>
+            <if test="region != null">
+                region=#{region},
+            </if>
+            <if test="picture != null">
+                picture=#{picture},
+            </if>
+            <if test="state != null">
+                state=#{state},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <!-- int count(); -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM fms_film
+    </select>
+
+    <!-- int countByName(String name); -->
+    <select id="countByName" resultType="int">
+        SELECT count(*)
+        FROM fms_film
+        WHERE name = #{name}
+    </select>
+
+    <!-- FileStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        fms_film
+        WHERE
+        id=#{id}
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            id,name, actor, director, detail, duration, type, hot,
+            gmt_release, region, picture,state
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.FilmStandardVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="actor" property="actor"/>
+        <result column="director" property="director"/>
+        <result column="detail" property="detail"/>
+        <result column="duration" property="duration"/>
+        <result column="type" property="type"/>
+        <result column="hot" property="hot"/>
+        <result column="gmt_release" property="gmtRelease"/>
+        <result column="region" property="region"/>
+        <result column="picture" property="picture"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_film
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,name, actor, director, detail, duration, type, hot,
+            gmt_release, region, picture,state
+        </if>
+    </sql>
+
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.FilmListItemVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="actor" property="actor"/>
+        <result column="director" property="director"/>
+        <result column="detail" property="detail"/>
+        <result column="duration" property="duration"/>
+        <result column="type" property="type"/>
+        <result column="hot" property="hot"/>
+        <result column="gmt_release" property="gmtRelease"/>
+        <result column="region" property="region"/>
+        <result column="picture" property="picture"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> listByTypeRegionYear();-->
+    <select id="listByTypeRegionYear" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_film ff
+        WHERE
+        ff.type LIKE CONCAT('%',#{type},'%') AND ff.region LIKE CONCAT('%',#{region},'%') AND ff.gmt_release LIKE CONCAT('%',#{year},'%')
+    </select>
+
+
+    <!--    Film findFilmById(Long id);-->
+    <select id="findFilmById" resultMap="itemResultMap">
+        select *
+        from fms_film
+        where id = #{id}
+    </select>
+
+    <resultMap id="itemResultMap" type="cn.tedu.galaxy.commons.pojo.film.entity.Film">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="actor" property="actor"/>
+        <result column="director" property="director"/>
+        <result column="detail" property="detail"/>
+        <result column="duration" property="duration"/>
+        <result column="type" property="type"/>
+        <result column="hot" property="hot"/>
+        <result column="gmt_release" property="gmtRelease"/>
+        <result column="region" property="region"/>
+        <result column="picture" property="picture"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <!--    Film findFilmByName(String name);-->
+    <select id="findMovieByName" parameterType="java.lang.String" resultMap="ListItemResultMap">
+        select *
+        from fms_film
+        where name = #{name}
+    </select>
+    <!--    List<FilmListItemVO> findAllFilm(int state);-->
+    <select id="findAllFilm" parameterType="java.lang.Integer" resultMap="ListItemResultMap">
+        select *
+        from fms_film
+        where state = #{state}
+    </select>
+    <!--    List<FilmListItemVO> findFilmLikeName(String name);-->
+<!--    <select id="findFilmLikeName" parameterType="java.lang.String" resultMap="ListItemResultMap">-->
+<!--        select *-->
+<!--        from fms_film-->
+<!--        where name like '%${value}%'-->
+<!--          and state = 1-->
+<!--    </select>-->
+    <!--    List<FilmListItemVO> findFilmLikeType(String type);-->
+<!--    <select id="findFilmLikeType" parameterType="java.lang.String" resultMap="ListItemResultMap">-->
+<!--        select *-->
+<!--        from fms_film-->
+<!--        where type like '%${value}%'-->
+<!--          and state = 1-->
+<!--    </select>-->
+    <!--    List<FilmListItemVO> findHots();-->
+    <select id="findHots" resultMap="ListItemResultMap">
+        select *
+        from fms_film
+        where state = 1
+        order by hot desc
+    </select>
+
+    <!-- 根据影院id查询电影 -->
+    <select id="listByCinemaId" resultType="cn.tedu.galaxy.commons.pojo.film.vo.FilmListByCinemaIdVO">
+        select distinct ff.name, ff.picture,ff.id
+        from fms_arrangement fa
+                 left join fms_cinema fc on fa.cinema_name = fc.name
+                 right join fms_film ff on fa.film_id = ff.id
+        where fc.id = #{cinemaId}
+    </select>
+
+</mapper>

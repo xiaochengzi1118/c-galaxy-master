@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.user.mapper.UserMapper">
+
+    <!--    int insert(User user);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ums_user (username, password,
+                              nick, sex, avatar, email,
+                              phone, enable)
+        VALUES (#{username}, #{password}, #{nick}, #{sex}, #{avatar}, #{email},
+                #{phone}, #{enable})
+    </insert>
+    <!--    int deleteById(Long id);-->
+    <delete id="deleteById">
+        DELETE
+        FROM ums_user
+        WHERE id = #{id}
+    </delete>
+
+<!--    int deleteByIds(Long[] ids);-->
+    <delete id="deleteByIds">
+        DELETE
+        FROM
+        ums_user
+        WHERE id IN (
+        <foreach collection="array" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
+
+    <!--    int update(User user );-->
+    <update id="update">
+        UPDATE
+        ums_user
+        <set>
+            <if test="username != null">
+                username=#{username},
+            </if>
+            <if test="password != null">
+                password=#{password},
+            </if>
+            <if test="nick != null">
+                nick=#{nick},
+            </if>
+            <if test="avatar != null">
+                avatar=#{avatar},
+            </if>
+            <if test="phone != null">
+                phone=#{phone},
+            </if>
+            <if test="email != null">
+                email=#{email},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="sex != null">
+                sex=#{sex},
+            </if>
+
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+
+    <!-- int countByUsername(String username); -->
+    <select id="countByUsername" resultType="int">
+        SELECT count(*) FROM ums_user WHERE username=#{username}
+    </select>
+
+    <!-- int countByPhone(String phone); -->
+    <select id="countByPhone" resultType="int">
+        SELECT count(*) FROM ums_user WHERE phone=#{phone}
+    </select>
+
+    <!-- int countByEmail(String email); -->
+    <select id="countByEmail" resultType="int">
+        SELECT count(*) FROM ums_user WHERE email=#{email}
+    </select>
+
+    <!-- UserStandardVO getStandardById(Long id); -->
+    <select id="getStandardById" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        ums_user
+        JOIN ums_user_role ON ums_user.id=ums_user_role.user_id
+        WHERE ums_user.id=#{ums_user.id} AND ums_user_role.role_id=2
+    </select>
+
+    <sql id="StandardQueryFields">
+        <if test="true">
+            ums_user.id,username, password,
+            nick, sex, avatar, email,
+            phone, enable
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.galaxy.commons.pojo.user.vo.UserStandardVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nick" property="nick" />
+        <result column="sex" property="sex" />
+        <result column="avatar" property="avatar" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+<!--    List<UserListItemVO> list();-->
+
+    <select id="list" resultMap="ListResultMap">
+        SELECT
+        <include refid="ListQueryFields"/>
+        FROM
+        ums_user
+        JOIN ums_user_role ON ums_user.id=ums_user_role.user_id
+        WHERE ums_user_role.role_id=2
+        ORDER BY ums_user.id
+    </select>
+
+    <sql id="ListQueryFields">
+        <if test="true">
+            ums_user.id,username, password,
+            nick, sex, avatar, email,
+            phone, enable
+        </if>
+    </sql>
+
+    <resultMap id="ListResultMap" type="cn.tedu.galaxy.commons.pojo.user.vo.UserListItemVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nick" property="nick" />
+        <result column="sex" property="sex" />
+        <result column="avatar" property="avatar" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="enable" property="enable" />
+    </resultMap>
+
+    <select id="getLoginInfoByUsername" resultMap="LoginResultMap">
+        SELECT
+        <include refid="LoginQueryFields"/>
+        FROM
+        ums_user
+        LEFT JOIN ums_user_role ON ums_user.id=ums_user_role.user_id
+        LEFT JOIN ums_role_permission ON ums_user_role.role_id=ums_role_permission.role_id
+        LEFT JOIN ums_permission ON ums_role_permission.permission_id=ums_permission.id
+        WHERE
+        username=#{username} AND ums_user_role.role_id=2
+    </select>
+
+    <sql id="LoginQueryFields">
+        <if test="true">
+            ums_user.id,
+            ums_user.username,
+            ums_user.password,
+            ums_user.enable,
+            ums_permission.value
+        </if>
+    </sql>
+
+    <!-- collection标签：用于配置返回结果类型中List类型的属性 -->
+    <!-- collection标签的ofType属性：List中的元素类型 -->
+    <!-- collection子级：需要配置如何创建出List中的每一个元素 -->
+    <resultMap id="LoginResultMap" type="cn.tedu.galaxy.commons.pojo.user.vo.UserLoginInfoVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="enable" property="enable"/>
+        <collection property="permissions" ofType="java.lang.String">
+            <constructor>
+                <arg column="value"/>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <!--User findUserById(long id);-->
+    <select id="findUserById" parameterType="long" resultMap="StandardResultMap">
+        select * from ums_user where id = #{id}
+    </select>
+
+<!--    UserStandardVO getStandardByPhone(String phone);-->
+    <select id="getStandardByPhone" resultMap="StandardResultMap">
+        SELECT
+        <include refid="StandardQueryFields"/>
+        FROM
+        ums_user
+        JOIN ums_user_role ON ums_user.id=ums_user_role.user_id
+        WHERE ums_user.phone=#{phone} AND ums_user_role.role_id=2
+    </select>
+
+</mapper>

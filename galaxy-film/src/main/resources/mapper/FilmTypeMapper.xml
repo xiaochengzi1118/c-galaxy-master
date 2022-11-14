@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.tedu.galaxy.film.mapper.FilmTypeMapper">
+    <resultMap id="ListItemResultMap" type="cn.tedu.galaxy.commons.pojo.film.vo.FilmListItemVO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="actor" property="actor"/>
+        <result column="director" property="director"/>
+        <result column="detail" property="detail"/>
+        <result column="duration" property="duration"/>
+        <result column="type" property="type"/>
+        <result column="hot" property="hot"/>
+        <result column="gmt_release" property="gmtRelease"/>
+        <result column="region" property="region"/>
+        <result column="picture" property="picture"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <!--List<FileListItemVO> list();-->
+    <select id="list" resultMap="ListItemResultMap">
+        SELECT
+        <include refid="ListItemQueryFields"/>
+        FROM
+        fms_film
+        ORDER BY
+        id=#{id}
+    </select>
+
+    <sql id="ListItemQueryFields">
+        <if test="true">
+            id,name, actor, director, detail, duration, type, hot,
+            gmt_release, region, picture,state
+        </if>
+    </sql>
+
+
+
+
+
+
+</mapper>
