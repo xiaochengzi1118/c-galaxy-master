@@ -102,6 +102,7 @@ public class UserController {
     @ApiOperationSupport(order = 600)
     @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "long")
     @PostMapping("/{id:[0-9]+}/update")
+    //                                 @PathVariable用于映射URL中的占位符
     public JsonResult<Void> updateById(@PathVariable Long id, UserUpdateDTO userUpdateDTO) {
         log.debug("开始处理【修改用户详情】的请求：id={}, userUpdateDTO={}", id, userUpdateDTO);
         userService.updateById(id, userUpdateDTO);

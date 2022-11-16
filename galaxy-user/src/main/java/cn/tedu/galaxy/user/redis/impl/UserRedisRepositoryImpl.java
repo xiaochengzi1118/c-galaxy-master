@@ -53,7 +53,7 @@ public class UserRedisRepositoryImpl implements IUserRedisRepository {
         Serializable value = opsForValue.get(key);
         log.debug("查询结果为{}",value);
 
-        //判断次数是否为空
+        //判断验证码是否为空
         if (value == null) {
             //是，存入次数，并设置过期时间
             int count = 1;

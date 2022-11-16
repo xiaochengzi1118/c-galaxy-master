@@ -10,6 +10,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import java.util.Map;
 // xjlugv6874@sandbox.com
 // 9428521.24 - 30 = 9428491.24 + 30 = 9428521.24
 @RestController
+@Slf4j
 @RequestMapping("/alipay")
 public class AliPayController {
 

@@ -3,7 +3,7 @@
 
 <mapper namespace="cn.tedu.galaxy.user.mapper.UserMapper">
 
-    <!--    int insert(User user);-->
+    <!--    int insert(User user)插入用户数据-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO ums_user (username, password,
                               nick, sex, avatar, email,
@@ -11,7 +11,8 @@
         VALUES (#{username}, #{password}, #{nick}, #{sex}, #{avatar}, #{email},
                 #{phone}, #{enable})
     </insert>
-    <!--    int deleteById(Long id);-->
+
+    <!--int deleteById(Long id);-->
     <delete id="deleteById">
         DELETE
         FROM ums_user

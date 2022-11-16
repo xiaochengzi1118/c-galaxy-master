@@ -293,9 +293,9 @@ public class UserServiceImpl implements IUserService {
         //臻子云服务器路径
         String apiUrl = "https://sms_developer.zhenzikj.com";
         //臻子云系统上获取用户id
-        String appId = "112280";
+        String appId = "112582";
         //用户识别码
-        String appSecret = "f2d963f2-181f-4e27-a539-acc526f12d08";
+        String appSecret = "b60aaa13-6f40-4785-aac4-a2756c4ce6bc";
 
         //生成随机验证码
         String code =String.valueOf((int)((Math.random()*9+1)*100000));
@@ -305,7 +305,7 @@ public class UserServiceImpl implements IUserService {
 
         Map<String,Object> params = new HashMap<>();
         params.put("number",phone);//存入手机号
-        params.put("templateId",10273);//存入短信模板
+        params.put("templateId",10729);//存入短信模板
         String[] templateParams =new String[2];
         templateParams[0]=code;//存入随机验证码
         templateParams[1]="1分钟";//设置1分钟
@@ -355,19 +355,16 @@ public class UserServiceImpl implements IUserService {
 //        Long id = byPhone.getId();
 //        String username = byPhone.getUsername();
 //        UserLoginInfoVO loginInfoByUsername = userMapper.getLoginInfoByUsername(username);
-
-
     }
 
     @Override
     public JsonPage<UserOrderStandardVO> getStandardByUserId(Long userId ,Integer page ,Integer pageSize) {
         JsonPage<UserOrderStandardVO> standardByUserId = dubboOrderService.getStandardByUserId(userId, page, pageSize);
         if (standardByUserId==null){
-            String message = "查看订单失败没有订单！";
+            String message = "查看订单失败,订单不存在！";
             log.warn(message);
             throw new ServiceException(ServiceCode.ERR_CONFLICT, message);
         }
-
         return standardByUserId;
     }
 

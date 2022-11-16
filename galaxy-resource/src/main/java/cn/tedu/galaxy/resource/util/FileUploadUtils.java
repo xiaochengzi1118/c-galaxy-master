@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class FileUploadUtils {
 
+
     /**
      * 根据日期生成文件夹名称
      *
